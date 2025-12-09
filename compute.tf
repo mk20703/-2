@@ -13,7 +13,7 @@
 
 # SSH 키 설정 (아까 만든 키 페어 사용)
 resource "aws_key_pair" "deployer" {
-  key_name   = "my-deploy-key"
+  key_name   = "mykey"
   public_key = file("~/.ssh/id_rsa.pub")
 }
 

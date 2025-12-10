@@ -1,9 +1,9 @@
 ﻿resource "aws_dynamodb_table" "dynamo_db" {
-  name         = "coin-server-db"
+  name         = "LupangUsers"
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "id"
+  hash_key     = "UserId"
   attribute {
-    name = "id"
+    name = "UserId"
     type = "S"
   }
   tags = { Name = "DynamoDB Table" }

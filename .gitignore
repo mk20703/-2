@@ -1,10 +1,22 @@
-﻿**/.terraform/*
+# Terraform 관련
 *.tfstate
 *.tfstate.*
-*.tfvars
+.terraform/
 crash.log
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-.vscode/
+
+# SSH 키 (절대 업로드 금지!)
+*.pem
+*.key
+id_rsa*
+
+# 환경 변수
+.env
+*.tfvars
+
+# OS 관련
+.DS_Store
+Thumbs.db

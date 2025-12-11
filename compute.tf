@@ -48,10 +48,9 @@ resource "aws_instance" "jenkins" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   key_name      = aws_key_pair.deployer.key_name
-  subnet_id     = aws_subnet.public["ap-northeast-2a"].id
+  subnet_id     = aws_subnet.private["ap-northeast-2a"].id
 
-  vpc_security_group_ids      = [aws_security_group.jenkins_sg.id]
-  associate_public_ip_address = true
+  vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
 
   tags = { Name = "Jenkins Server" }
 }
@@ -72,6 +71,14 @@ resource "aws_instance" "app" {
   subnet_id              = aws_subnet.private[each.value].id
   vpc_security_group_ids = [aws_security_group.app_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.app_profile.name
+
+  user_data = <<-EOF
+              #!/bin/bash
+              apt-get update
+              apt-get install -y python3
+              cd /home/ubuntu
+              nohup python3 -m http.server 8000 &
+              EOF
 
   tags = { Name = "App Server ${each.key}" }
 }

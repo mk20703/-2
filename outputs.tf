@@ -8,9 +8,9 @@ output "bastion_public_ip" {
   value       = aws_instance.bastion.public_ip
 }
 
-output "jenkins_public_ip" {
-  description = "Jenkins Server Public IP"
-  value       = aws_instance.jenkins.public_ip
+output "jenkins_private_ip" {
+  description = "Jenkins Server Private IP"
+  value       = aws_instance.jenkins.private_ip
 }
 
 output "app_server_private_ips" {
@@ -28,9 +28,14 @@ output "s3_bucket_name" {
   value       = aws_s3_bucket.app_bucket.id
 }
 
-output "dynamodb_table_name" {
-  description = "DynamoDB Table Name"
-  value       = aws_dynamodb_table.dynamo_db.name
+output "dynamodb_users_table" {
+  description = "DynamoDB LupangUsers Table Name"
+  value       = aws_dynamodb_table.lupang_users.name
+}
+
+output "dynamodb_orders_table" {
+  description = "DynamoDB LupangOrders Table Name"
+  value       = aws_dynamodb_table.lupang_orders.name
 }
 
 # SSH 접속 명령어
@@ -40,14 +45,14 @@ output "connect_bastion" {
 }
 
 output "connect_jenkins" {
-  description = "SSH command to connect to Jenkins"
-  value       = "ssh -i key.pem ubuntu@${aws_instance.jenkins.public_ip}"
+  description = "SSH command to connect to Jenkins via Bastion"
+  value       = "ssh -i key.pem -J ubuntu@${aws_instance.bastion.public_ip} ubuntu@${aws_instance.jenkins.private_ip}"
 }
 
 # 웹 접속 URL
 output "jenkins_url" {
-  description = "Jenkins Web UI URL"
-  value       = "http://${aws_instance.jenkins.public_ip}:8080"
+  description = "Jenkins Web UI URL (accessible via Bastion port forwarding)"
+  value       = "http://localhost:8080 (use: ssh -i key.pem -L 8080:${aws_instance.jenkins.private_ip}:8080 ubuntu@${aws_instance.bastion.public_ip})"
 }
 
 output "app_url" {

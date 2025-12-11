@@ -36,7 +36,10 @@ resource "aws_iam_role_policy" "app_policy" {
           "dynamodb:Query",
           "dynamodb:Scan"
         ]
-        Resource = aws_dynamodb_table.dynamo_db.arn
+        Resource = [
+          aws_dynamodb_table.lupang_users.arn,
+          aws_dynamodb_table.lupang_orders.arn
+        ]
       },
       {
         Effect = "Allow"

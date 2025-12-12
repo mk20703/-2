@@ -25,14 +25,14 @@ output "bastion_private_ip" {
   value       = aws_instance.bastion.private_ip
 }
 
-output "app_server_1_private_ip" {
-  description = "App Server 1 Private IP"
-  value       = aws_instance.app_1.private_ip
+output "asg_name" {
+  description = "Auto Scaling Group Name"
+  value       = aws_autoscaling_group.app.name
 }
 
-output "app_server_2_private_ip" {
-  description = "App Server 2 Private IP"
-  value       = aws_instance.app_2.private_ip
+output "asg_desired_capacity" {
+  description = "Auto Scaling Group Desired Capacity"
+  value       = aws_autoscaling_group.app.desired_capacity
 }
 
 output "ssh_private_key_path" {
@@ -110,11 +110,12 @@ output "connection_instructions" {
     1. SSH to Bastion Host:
        ssh -i ${local_file.private_key.filename} ec2-user@${aws_instance.bastion.public_ip}
 
-    2. From Bastion, SSH to App Server 1:
-       ssh ec2-user@${aws_instance.app_1.private_ip}
+    2. View Auto Scaling Group instances:
+       aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names ${aws_autoscaling_group.app.name}
 
-    3. From Bastion, SSH to App Server 2:
-       ssh ec2-user@${aws_instance.app_2.private_ip}
+    3. SSH to ASG instances (from Bastion):
+       # Get instance IPs first, then SSH to them
+       ssh ec2-user@<ASG_INSTANCE_PRIVATE_IP>
 
     4. Access Application:
        http://${aws_lb.main.dns_name}
